@@ -39,7 +39,7 @@ export default class Todo extends Component {
           ? <View style={styles.actions}>
               <TouchableOpacity onPressOut={this._finishEditing}>
                 <View style={styles.actionContainer}>
-                  <Text style={styles.actionText}>○</Text>
+                  <Text style={styles.actionText}>OK</Text>
                 </View>
               </TouchableOpacity>
             </View>
@@ -54,7 +54,7 @@ export default class Todo extends Component {
                   <Text style={styles.actionText}>X</Text>
                 </View>
               </TouchableOpacity>
-            </View>}``
+            </View>}
       </View>
     );
   }
