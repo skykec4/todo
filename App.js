@@ -32,7 +32,7 @@ export default class App extends React.Component {
             returnKeyType={"done"}
             autoCorrect={false}
           />
-          <ScrollView>
+          <ScrollView contentContainerStyle={styles.ToDos}>
             <Todo />
           </ScrollView>
         </View>
@@ -85,5 +85,8 @@ const styles = StyleSheet.create({
     borderBottomColor: "#FFF",
     borderBottomWidth: 1,
     fontSize: 25
+  },
+  ToDos: {
+    alignItems: "center"
   }
 });
