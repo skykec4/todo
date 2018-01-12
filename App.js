@@ -35,17 +35,19 @@ export default class App extends React.Component {
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" />
-        <Text style={styles.title}>To do</Text>
+        <Text style={styles.title}>해야 할 일</Text>
         <View style={styles.card}>
           <TextInput
             style={styles.input}
-            placeholder="Input To do"
+            placeholder="할 일"
             value={newTodo}
             onChangeText={this._controlNewTodo}
             placeholderTextColor={"#999"}
             returnKeyType={"done"}
             autoCorrect={false}
             onSubmitEditing={this._addToDo}
+            blurOnSubmit={true}
+            underlineColorAndroid={"transparent"}
           />
           <ScrollView contentContainerStyle={styles.ToDos}>
             {Object.values(toDos)
@@ -76,16 +78,19 @@ export default class App extends React.Component {
       const parsedToDos = JSON.parse(toDos);
       this.setState({
         loadedToDos: true,
-        toDos: parsedToDos
+        toDos: parsedToDos || {}
       });
     } catch (err) {
       console.log(err);
     }
   };
   _addToDo = () => {
-    const { newTodo } = this.state;
+    const { newTodo, toDos } = this.state;
     if (newTodo !== "") {
-      this.setState(prevSate => {
+      this.setState({
+        newTodo: ""
+      });
+      this.setState(prevState => {
         const ID = uuidv1();
         const newToDoObject = {
           [ID]: {
@@ -96,13 +101,14 @@ export default class App extends React.Component {
           }
         };
         const newState = {
-          ...prevSate,
-          newToDo: "",
+          ...prevState,
+          newTodo: "",
           toDos: {
-            ...prevSate.toDos,
+            ...prevState.toDos,
             ...newToDoObject
           }
         };
+
         this._saveToDos(newState.toDos);
         return { ...newState };
       });

@@ -59,6 +59,7 @@ export default class Todo extends Component {
                 onChangeText={this._controlInput}
                 returnKeyType={"done"}
                 onBlur={this._finishEditing}
+                underlineColorAndroid={"transparent"}
               />
             : <Text
                 style={[
@@ -76,7 +77,7 @@ export default class Todo extends Component {
                   {/*<Text style={styles.actionText}></Text>*/}
                   <Image
                     source={require("./assets/ok.png")}
-                    style={{ width: 30, height: 30 }}
+                    style={{ width: 28, height: 28 }}
                   />
                 </View>
               </TouchableOpacity>
@@ -87,7 +88,7 @@ export default class Todo extends Component {
                   {/*<Text style={styles.actionText}>수정</Text>*/}
                   <Image
                     source={require("./assets/edit3.png")}
-                    style={{ width: 30, height: 30 }}
+                    style={{ width: 28, height: 28 }}
                   />
                 </View>
               </TouchableOpacity>
@@ -101,7 +102,7 @@ export default class Todo extends Component {
                   {/*<Text style={styles.actionText}>X</Text>*/}
                   <Image
                     source={require("./assets/delete2.png")}
-                    style={{ width: 30, height: 30 }}
+                    style={{ width: 28, height: 28 }}
                   />
                 </View>
               </TouchableOpacity>
@@ -147,7 +148,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    height: 80
   },
   circle: {
     width: 30,
@@ -189,8 +191,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10
   },
   input: {
-    marginVertical: 10,
-    width: width / 2,
-    paddingVertical: 9
+    marginVertical: 20,
+    width: width / 2
   }
 });
