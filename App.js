@@ -7,17 +7,31 @@ import {
   TextInput,
   Dimensions,
   Platform,
-  ScrollView
+  ScrollView,
+  AsyncStorage
 } from "react-native";
+import { AppLoading } from "expo";
 import Todo from "./Todo";
+import uuidv1 from "uuid/v1";
+
 const { width, height } = Dimensions.get("window");
 
 export default class App extends React.Component {
   state = {
-    newTodo: ""
+    newTodo: "",
+    loadedToDos: false,
+    toDos: {}
   };
+
+  componentDidMount = () => {
+    this._loadTodos();
+  };
+
   render() {
-    const { newTodo } = this.state;
+    const { newTodo, loadedToDos, toDos } = this.state;
+    if (!loadedToDos) {
+      return <AppLoading />;
+    }
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" />
@@ -31,9 +45,21 @@ export default class App extends React.Component {
             placeholderTextColor={"#999"}
             returnKeyType={"done"}
             autoCorrect={false}
+            onSubmitEditing={this._addToDo}
           />
           <ScrollView contentContainerStyle={styles.ToDos}>
-            <Todo />
+            {Object.values(toDos)
+              .reverse()
+              .map(todo =>
+                <Todo
+                  key={todo.id}
+                  {...todo}
+                  deleteToDo={this._deleteTodo}
+                  uncompleteToDO={this._uncompleteToDO}
+                  completeToDO={this._completeToDO}
+                  updateToDO={this._updateToDO}
+                />
+              )}
           </ScrollView>
         </View>
       </View>
@@ -43,6 +69,110 @@ export default class App extends React.Component {
     this.setState({
       newTodo: text
     });
+  };
+  _loadTodos = async () => {
+    try {
+      const toDos = await AsyncStorage.getItem("toDos");
+      const parsedToDos = JSON.parse(toDos);
+      this.setState({
+        loadedToDos: true,
+        toDos: parsedToDos
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  _addToDo = () => {
+    const { newTodo } = this.state;
+    if (newTodo !== "") {
+      this.setState(prevSate => {
+        const ID = uuidv1();
+        const newToDoObject = {
+          [ID]: {
+            id: ID,
+            isCompleted: false,
+            text: newTodo,
+            createdAt: Date.now()
+          }
+        };
+        const newState = {
+          ...prevSate,
+          newToDo: "",
+          toDos: {
+            ...prevSate.toDos,
+            ...newToDoObject
+          }
+        };
+        this._saveToDos(newState.toDos);
+        return { ...newState };
+      });
+    }
+  };
+  _deleteTodo = id => {
+    this.setState(prevState => {
+      const toDos = prevState.toDos;
+      delete toDos[id];
+      const newState = {
+        ...prevState,
+        ...toDos
+      };
+      this._saveToDos(newState.toDos);
+      return { ...newState };
+    });
+  };
+
+  _uncompleteToDO = id => {
+    this.setState(prevState => {
+      const newState = {
+        ...prevState,
+        toDos: {
+          ...prevState.toDos,
+          [id]: {
+            ...prevState.toDos[id],
+            isCompleted: false
+          }
+        }
+      };
+      this._saveToDos(newState.toDos);
+      return { ...newState };
+    });
+  };
+  _completeToDO = id => {
+    this.setState(prevState => {
+      const newState = {
+        ...prevState,
+        toDos: {
+          ...prevState.toDos,
+          [id]: {
+            ...prevState.toDos[id],
+            isCompleted: true
+          }
+        }
+      };
+      this._saveToDos(newState.toDos);
+      return { ...newState };
+    });
+  };
+
+  _updateToDO = (id, text) => {
+    this.setState(prevState => {
+      const newState = {
+        ...prevState,
+        toDos: {
+          ...prevState.toDos,
+          [id]: {
+            ...prevState.toDos[id],
+            text: text
+          }
+        }
+      };
+      this._saveToDos(newState.toDos);
+      return { ...newState };
+    });
+  };
+
+  _saveToDos = newToDos => {
+    const saveToDos = AsyncStorage.setItem("toDos", JSON.stringify(newToDos));
   };
 }
 
@@ -82,7 +212,7 @@ const styles = StyleSheet.create({
   },
   input: {
     padding: 20,
-    borderBottomColor: "#FFF",
+    borderBottomColor: "#bbb",
     borderBottomWidth: 1,
     fontSize: 25
   },

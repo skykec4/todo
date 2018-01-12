@@ -1,0 +1,34 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Users\KIMEUNGCHEON\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add uuid
+
+PATH: 
+  C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\Java\jdk1.8.0_121\bin;C:\Program Files\nodejs\;C:\Program Files\Git\cmd;C:\Users\KIMEUNGCHEON\AppData\Local\Microsoft\WindowsApps;C:\Program Files\Bandizip\;C:\Users\KIMEUNGCHEON\AppData\Roaming\npm;C:\Program Files\Microsoft VS Code\bin;
+
+Yarn version: 
+  1.3.2
+
+Node version: 
+  8.9.1
+
+Platform: 
+  win32 x64
+
+npm manifest: 
+  {
+    "main": "node_modules/expo/AppEntry.js",
+    "private": true,
+    "dependencies": {
+      "expo": "^24.0.0",
+      "react": "16.0.0",
+      "react-native": "https://github.com/expo/react-native/archive/sdk-24.0.0.tar.gz"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
+
+Trace: 
+  Error: EPERM: operation not permitted, unlink 'C:\Users\KIMEUNGCHEON\todo\node_modules\boom\lib'
